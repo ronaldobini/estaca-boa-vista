@@ -1,0 +1,33 @@
+<nav class="bini-estaca-menu-ribbon" aria-label="Estaca Boa Vista">
+  {% if estaca_portal %}
+    {% if estaca_ribbon == 'hub' %}
+    <span class="bini-estaca-ribbon-here" aria-current="page">Início</span>
+    {% else %}
+    <a class="bini-estaca-ribbon-link" href="{{ url_for('estaca.index') }}">Início</a>
+    {% endif %}
+  {% else %}
+    <a class="bini-estaca-ribbon-link" href="{{ url_for('tools.home') }}">← Início</a>
+    {% if estaca_ribbon == 'hub' %}
+    <span class="bini-estaca-ribbon-here" aria-current="page">Estaca</span>
+    {% else %}
+    <a class="bini-estaca-ribbon-link" href="{{ url_for('estaca.index') }}">Estaca</a>
+    {% endif %}
+  {% endif %}
+  {% if estaca_ribbon == 'chamados' %}
+  <span class="bini-estaca-ribbon-here" aria-current="page">Chamados</span>
+  {% else %}
+  <a class="bini-estaca-ribbon-link" href="{{ url_for('estaca.chamados') }}">Chamados</a>
+  {% endif %}
+  {% if estaca_ribbon == 'historico' %}
+  <span class="bini-estaca-ribbon-here" aria-current="page">Histórico</span>
+  {% else %}
+  <a class="bini-estaca-ribbon-link" href="{{ url_for('estaca.chamados_historico') }}">Histórico</a>
+  {% endif %}
+  {% if can_manage_users %}
+    {% if estaca_ribbon == 'usuarios' %}
+    <span class="bini-estaca-ribbon-here" aria-current="page">Utilizadores</span>
+    {% else %}
+    <a class="bini-estaca-ribbon-link" href="{{ url_for('estaca.usuarios') }}">Utilizadores</a>
+    {% endif %}
+  {% endif %}
+</nav>

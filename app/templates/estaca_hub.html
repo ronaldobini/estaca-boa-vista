@@ -1,0 +1,30 @@
+{% extends estaca_layout %}
+{% block title %}{% if estaca_portal %}Estaca Boa Vista{% else %}Estaca Boa Vista — Bini Tools{% endif %}{% endblock %}
+{% block content %}
+<section class="bini-estaca-page">
+  {% if not estaca_portal %}
+  {% include "partials/estaca_menu_ribbon.html" %}
+  {% endif %}
+
+  <header class="bini-tool-hd">
+    <h1 class="bini-h1">{% if estaca_portal %}Ferramentas{% else %}Estaca Boa Vista{% endif %}</h1>
+    <p class="bini-sub">
+      {% if estaca_portal %}Área para líderes da estaca{% else %}Ferramentas para líderes da estaca{% endif %}
+      {% if leader_role_label %} · {{ leader_role_label }}{% endif %}
+      {% if ward_label %} · {{ ward_label }}{% endif %}
+      {% if active_callings %} · {{ active_callings }} chamado(s) em andamento{% endif %}.
+    </p>
+  </header>
+
+  <ul class="bini-estaca-subtools">
+    {% for slug, title, desc in subtools %}
+    <li>
+      <a class="bini-estaca-subtool-card" href="{{ url_for(subtool_endpoints[slug]) if slug in subtool_endpoints else url_for('estaca.index') }}">
+        <span class="bini-estaca-subtool-title">{{ title }}</span>
+        <span class="bini-estaca-subtool-desc">{{ desc }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends estaca_layout %}
+{% block title %}Chamados da Estaca — Estaca Boa Vista{% endblock %}
+{% block content %}
+<section class="bini-estaca-page">
+  {% include "partials/estaca_menu_ribbon.html" %}
+
+  <header class="bini-tool-hd">
+    <h1 class="bini-h1">Chamados da Estaca</h1>
+    <p class="bini-sub">
+      {% if leader_role_label %}{{ leader_role_label }}{% endif %}
+      {% if ward_label %} · {{ ward_label }}{% endif %}
+    </p>
+  </header>
+
+  <nav class="bini-estaca-flow" aria-label="Passos do fluxo">
+    <a
+      class="bini-estaca-flow-step {% if not status_filter %}is-on{% endif %}"
+      href="{{ url_for('estaca.chamados') }}"
+    >
+      <span class="bini-estaca-flow-lab">Todos</span>
+      <span class="bini-estaca-flow-count">{{ (counts.get('indication',0)+counts.get('hc_support',0)+counts.get('interview',0)+counts.get('sacrament',0)+counts.get('designation',0)+counts.get('register_system',0)) }}</span>
+    </a>
+    {% for st, lab in workflow_steps %}
+    <span class="bini-estaca-flow-arrow" aria-hidden="true">→</span>
+    <div class="bini-estaca-flow-cell">
+      <a
+        class="bini-estaca-flow-step {% if status_filter == st %}is-on{% endif %}"
+        href="{{ url_for('estaca.chamados', status=st) }}"
+      >
+        <span class="bini-estaca-flow-lab">{{ lab }}</span>
+        <span class="bini-estaca-flow-count">{{ counts.get(st, 0) }}</span>
+      </a>
+      {% if workflow_step_help and workflow_step_help.get(st) %}
+      <details class="bini-estaca-step-help">
+        <summary class="bini-estaca-step-help-sum" title="Ajuda sobre este passo" aria-label="Ajuda: {{ lab }}">?</summary>
+        <div class="bini-estaca-step-help-body">{{ workflow_step_help[st] }}</div>
+      </details>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </nav>
+
+  <div class="bini-estaca-toolbar">
+    <a class="bini-btn" href="{{ url_for('estaca.chamados_historico') }}">Histórico</a>
+  </div>
+
+  {% if can_create %}
+  <details class="bini-estaca-new" id="estaca-nova-indicacao">
+    <summary class="bini-estaca-new-plus" aria-label="Nova indicação">
+      <span class="bini-estaca-new-plus-mark" aria-hidden="true">+</span>
+      <span class="bini-estaca-new-plus-lab">Nova indicação</span>
+    </summary>
+    <form class="bini-estaca-new-form" method="post" action="{{ url_for('estaca.chamado_novo') }}" autocomplete="off">
+      <div class="bini-estaca-new-grid">
+        {% if wards_create|length > 1 %}
+        <label class="bini-estaca-field">
+          <span>Ala</span>
+          <select class="bini-input" name="ward_slug" required>
+            {% for slug, lab in wards_create %}
+            <option value="{{ slug }}">{{ lab }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        {% else %}
+        <input type="hidden" name="ward_slug" value="{{ wards_create[0][0] }}">
+        {% endif %}
+        <label class="bini-estaca-field">
+          <span>Nome do membro</span>
+          <input class="bini-input" type="text" name="person_name" maxlength="255" required placeholder="Nome completo">
+        </label>
+        <label class="bini-estaca-field">
+          <span>Chamado</span>
+          <input class="bini-input" type="text" name="calling_title" maxlength="255" required placeholder="Ex.: Conselheiro do bispado">
+        </label>
+        <label class="bini-estaca-field bini-estaca-field--wide">
+          <span>Notas (opcional)</span>
+          <input class="bini-input" type="text" name="notes" maxlength="500" placeholder="Observações para a estaca">
+        </label>
+      </div>
+      <button type="submit" class="bini-btn bini-btn-prim">Indicar</button>
+    </form>
+  </details>
+  {% endif %}
+
+  {% if callings %}
+  <ul class="bini-estaca-list">
+    {% for c in callings %}
+    <li>
+      <a class="bini-estaca-card" href="{{ url_for('estaca.chamado_detail', cid=c.id) }}">
+        <div class="bini-estaca-card-main">
+          <span class="bini-estaca-card-name">{{ c.person_name }}</span>
+          <span class="bini-estaca-card-title">{{ c.calling_title }}</span>
+        </div>
+        <div class="bini-estaca-card-meta">
+          <span class="bini-estaca-pill">{{ c.ward_label }}</span>
+          <span class="bini-estaca-pill bini-estaca-pill--step">{{ c.status_label }}</span>
+        </div>
+        <div class="bini-estaca-mini-flow" aria-hidden="true">
+          {% for t in c.timeline %}
+          <span class="bini-estaca-dot bini-estaca-dot--{{ t.state }}"></span>
+          {% endfor %}
+        </div>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="bini-empty">Nenhum chamado neste filtro. {% if can_create %}Usa o botão <strong>+</strong> para criar uma indicação.{% endif %}</p>
+  {% endif %}
+</section>
+{% endblock %}

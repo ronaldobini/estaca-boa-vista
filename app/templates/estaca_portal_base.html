@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Estaca Boa Vista{% endblock %}</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/estaca/church_jesus_christ_simplified_symbol.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/estaca/church_jesus_christ_simplified_symbol.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/binitools.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estaca_portal.css') }}">
+  <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+</head>
+<body class="ebv-body">
+  <header class="ebv-top">
+    <a class="ebv-brand" href="{{ url_for('estaca.index') }}">
+      <img
+        class="ebv-brand-mark"
+        src="{{ url_for('static', filename='img/estaca/church_jesus_christ_simplified_symbol.png') }}"
+        width="40"
+        height="40"
+        alt=""
+      >
+      <span class="ebv-brand-text">
+        <span class="ebv-brand-name">Estaca Boa Vista</span>
+        <span class="ebv-brand-sub">Ferramentas</span>
+      </span>
+    </a>
+    {% block top_nav %}
+    <nav class="ebv-nav" aria-label="Principal">
+      <a href="{{ url_for('estaca.index') }}" class="{% if estaca_ribbon == 'hub' %}is-on{% endif %}">Início</a>
+      <a href="{{ url_for('estaca.chamados') }}" class="{% if estaca_ribbon == 'chamados' %}is-on{% endif %}">Chamados</a>
+      <a href="{{ url_for('estaca.chamados_historico') }}" class="{% if estaca_ribbon == 'historico' %}is-on{% endif %}">Histórico</a>
+      {% if can_manage_users %}
+      <a href="{{ url_for('estaca.usuarios') }}" class="{% if estaca_ribbon == 'usuarios' %}is-on{% endif %}">Utilizadores</a>
+      {% endif %}
+      <a href="{{ url_for('auth.profile') }}">Perfil</a>
+      {% if current_user.is_authenticated %}
+      <span class="ebv-who" title="Utilizador autenticado">
+        <span class="ebv-who-lab">Sessão</span>
+        <span class="ebv-who-name">{{ (current_user.display_name or current_user.username)|e }}</span>
+        <span class="ebv-who-user">@{{ current_user.username|e }}</span>
+      </span>
+      {% endif %}
+      <form class="ebv-nav-out" method="post" action="{{ url_for('ebv.logout') }}">
+        <button type="submit" class="ebv-linkish">Sair</button>
+      </form>
+    </nav>
+    {% endblock %}
+  </header>
+
+  <main class="ebv-main">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="bini-flash-wrap" id="bini-flash">
+      {% for cat, m in messages %}
+      <p class="bini-msg {% if cat == 'error' %}bini-msg-err{% else %}bini-msg-ok{% endif %}">{{ m }}</p>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <div id="bini-toast" class="bini-toast" hidden></div>
+  <script src="{{ url_for('static', filename='js/binitools.js') }}" defer></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

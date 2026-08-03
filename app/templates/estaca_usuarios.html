@@ -1,0 +1,144 @@
+{% extends estaca_layout %}
+{% block title %}Utilizadores — Estaca Boa Vista{% endblock %}
+{% block content %}
+<section class="bini-estaca-page">
+  {% include "partials/estaca_menu_ribbon.html" %}
+
+  <header class="bini-tool-hd">
+    <h1 class="bini-h1">Utilizadores</h1>
+    <p class="bini-sub">
+      Criar, editar e gerar senhas — só presidência da estaca, secretário da estaca e Admin{% if leader_role_label %} · {{ leader_role_label }}{% endif %}{% if ward_label %} · {{ ward_label }}{% endif %}.
+    </p>
+  </header>
+
+  {% include "partials/credentials_share.html" %}
+
+  <details class="bini-estaca-new" {% if edit_user or not leaders %}open{% endif %}>
+    <summary class="bini-estaca-new-sum">{% if edit_user %}Editar {{ edit_user.username }}{% else %}Novo utilizador{% endif %}</summary>
+    <form class="bini-estaca-new-form" method="post" action="{{ url_for('estaca.usuarios') }}" autocomplete="off">
+      <input type="hidden" name="action" value="{{ 'update' if edit_user else 'create' }}">
+      {% if edit_user %}
+      <input type="hidden" name="user_id" value="{{ edit_user.id }}">
+      {% endif %}
+      <div class="bini-estaca-new-grid">
+        {% if not edit_user %}
+        <label class="bini-estaca-field">
+          <span>Utilizador (login)</span>
+          <input class="bini-input" type="text" name="username" maxlength="64" required autocomplete="off">
+        </label>
+        <p class="bini-hint bini-estaca-field bini-estaca-field--wide">A senha temporária é gerada automaticamente e aparece para copiares depois de criar.</p>
+        {% else %}
+        <label class="bini-estaca-field">
+          <span>Utilizador</span>
+          <input class="bini-input" type="text" value="{{ edit_user.username }}" disabled>
+        </label>
+        {% endif %}
+        <label class="bini-estaca-field">
+          <span>Nome</span>
+          <input class="bini-input" type="text" name="display_name" maxlength="128"
+            value="{{ (edit_user.display_name if edit_user else '')|e }}" placeholder="Opcional">
+        </label>
+        <label class="bini-estaca-field">
+          <span>Papel</span>
+          <select class="bini-input" name="role" id="estaca-user-role" required>
+            {% for slug, lab, kind in roles %}
+            <option value="{{ slug }}" data-kind="{{ kind }}"
+              {% if edit_leader and edit_leader.role == slug %}selected{% endif %}>{{ lab }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label class="bini-estaca-field" id="estaca-user-ward-wrap">
+          <span>Ala</span>
+          {% if ward_locked %}
+          <input type="hidden" name="ward_slug" value="{{ locked_ward }}">
+          <input class="bini-input" type="text" value="{{ ward_label }}" disabled>
+          {% else %}
+          <select class="bini-input" name="ward_slug" id="estaca-user-ward">
+            <option value="">— (estaca) —</option>
+            {% for slug, lab in wards %}
+            <option value="{{ slug }}" {% if edit_leader and edit_leader.ward_slug == slug %}selected{% endif %}>{{ lab }}</option>
+            {% endfor %}
+          </select>
+          {% endif %}
+        </label>
+      </div>
+      {% if can_grant_admin %}
+      <label class="bini-estaca-admin-check">
+        <input type="checkbox" name="is_admin" value="on"
+          {% if edit_leader and edit_leader.is_admin %}checked{% endif %}>
+        <span><strong>Admin Estaca</strong> — permissões totais *só* na Estaca Boa Vista (em paralelo ao chamado). Não dá acesso ao Admin Bini Tools nem a outras ferramentas.</span>
+      </label>
+      {% elif edit_leader and edit_leader.is_admin %}
+      <p class="bini-hint">Este utilizador é <strong>Admin Estaca</strong> (só outro Admin Estaca pode alterar). Isto não abre outras ferramentas Bini Tools.</p>
+      {% endif %}
+      <div class="bini-quickrow">
+        <button type="submit" class="bini-btn bini-btn-prim">{% if edit_user %}Guardar{% else %}Criar{% endif %}</button>
+        {% if edit_user %}
+        <a class="bini-btn" href="{{ url_for('estaca.usuarios') }}">Cancelar</a>
+        {% endif %}
+      </div>
+    </form>
+  </details>
+
+  {% if leaders %}
+  <ul class="bini-estaca-user-list">
+    {% for L in leaders %}
+    <li class="bini-estaca-user-row">
+      <div class="bini-estaca-user-main">
+        <span class="bini-estaca-user-name">
+          {{ L.display_name or L.username }}
+          {% if L.is_admin %}<span class="bini-estaca-pill bini-estaca-pill--admin">Admin Estaca</span>{% endif %}
+        </span>
+        <span class="bini-estaca-user-meta">{{ L.username }} · {{ L.role_label }} · {{ L.ward_label }}</span>
+        <span class="bini-estaca-user-meta bini-estaca-user-login">
+          {% if L.last_login_at %}
+          Último login {{ fmt_dt(L.last_login_at) }} · {{ L.login_count }} login{% if L.login_count != 1 %}s{% endif %}
+          {% else %}
+          Ainda sem login · {{ L.login_count }} logins
+          {% endif %}
+        </span>
+      </div>
+      <div class="bini-estaca-user-acts">
+        {% if L.can_edit %}
+        <a class="bini-btn bini-btn--sm" href="{{ url_for('estaca.usuarios', edit=L.user_id) }}">Editar</a>
+        {% endif %}
+        {% if L.can_reset_password %}
+        <form method="post" action="{{ url_for('estaca.usuarios') }}" onsubmit="return confirm('Gerar nova senha temporária para {{ L.username }}?');">
+          <input type="hidden" name="action" value="reset_password">
+          <input type="hidden" name="user_id" value="{{ L.user_id }}">
+          <button type="submit" class="bini-btn bini-btn--sm">Nova senha</button>
+        </form>
+        {% endif %}
+        {% if L.can_delete %}
+        <form method="post" action="{{ url_for('estaca.usuarios') }}" onsubmit="return confirm('Excluir {{ L.username }}?');">
+          <input type="hidden" name="action" value="delete">
+          <input type="hidden" name="user_id" value="{{ L.user_id }}">
+          <button type="submit" class="bini-btn bini-btn--sm bini-estaca-btn-reject">Excluir</button>
+        </form>
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="bini-empty">Ainda não há utilizadores visíveis para a tua organização.</p>
+  {% endif %}
+</section>
+<script>
+(function () {
+  var role = document.getElementById("estaca-user-role");
+  var ward = document.getElementById("estaca-user-ward");
+  var wrap = document.getElementById("estaca-user-ward-wrap");
+  if (!role || !ward || !wrap) return;
+  function sync() {
+    var opt = role.options[role.selectedIndex];
+    var kind = opt ? opt.getAttribute("data-kind") : "";
+    var need = kind === "ala";
+    ward.required = need;
+    wrap.style.opacity = need ? "1" : "0.55";
+  }
+  role.addEventListener("change", sync);
+  sync();
+})();
+</script>
+{% endblock %}

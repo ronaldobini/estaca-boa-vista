@@ -1,0 +1,50 @@
+{% extends estaca_layout %}
+{% block title %}Meu perfil — Estaca Boa Vista{% endblock %}
+{% block content %}
+<section class="bini-profile-page">
+  <header class="bini-tool-hd">
+    <h1 class="bini-h1">Meu perfil</h1>
+    <p class="bini-sub">Dados pessoais e senha.</p>
+  </header>
+
+  <form class="bini-form bini-profile-form" method="post" action="{{ url_for('auth.profile') }}">
+    <fieldset class="bini-profile-section">
+      <legend class="bini-profile-legend">Dados pessoais</legend>
+      <label class="bini-label" for="display_name">Nome</label>
+      <input class="bini-input" type="text" id="display_name" name="display_name" maxlength="128"
+        value="{{ (user.display_name or '')|e }}" placeholder="Como queres ser identificado" autocomplete="name">
+
+      <label class="bini-label" for="email">E-mail</label>
+      <input class="bini-input" type="email" id="email" name="email" maxlength="255"
+        value="{{ (user.email or '')|e }}" placeholder="opcional@email.com" autocomplete="email">
+
+      <label class="bini-label" for="username">Utilizador (login)</label>
+      {% if user.username == 'admin' %}
+      <input class="bini-input" type="text" id="username" value="admin" disabled>
+      <p class="bini-hint">A conta <strong>admin</strong> não pode mudar o nome de utilizador.</p>
+      {% else %}
+      <input class="bini-input" type="text" id="username" name="username" maxlength="64"
+        value="{{ user.username|e }}" required autocomplete="username">
+      {% endif %}
+    </fieldset>
+
+    <fieldset class="bini-profile-section">
+      <legend class="bini-profile-legend">Alterar senha</legend>
+      <p class="bini-hint">Deixa em branco para manter a senha actual.</p>
+      <label class="bini-label" for="current_password">Senha actual</label>
+      <input class="bini-input" type="password" id="current_password" name="current_password" autocomplete="current-password">
+
+      <label class="bini-label" for="new_password">Nova senha</label>
+      <input class="bini-input" type="password" id="new_password" name="new_password" autocomplete="new-password">
+
+      <label class="bini-label" for="new_password_confirm">Confirmar nova senha</label>
+      <input class="bini-input" type="password" id="new_password_confirm" name="new_password_confirm" autocomplete="new-password">
+    </fieldset>
+
+    <div class="bini-quickrow bini-profile-actions">
+      <button type="submit" class="bini-btn bini-btn-prim">Guardar perfil</button>
+      <a class="bini-btn" href="{{ url_for('estaca.index') }}">Cancelar</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

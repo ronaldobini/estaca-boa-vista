@@ -1,0 +1,542 @@
+/* Portal Estaca Boa Vista — tons alinhados a churchofjesuschrist.org
+   Sobrescreve o tema escuro de binitools.css só dentro de .ebv-body. */
+:root {
+  --ebv-teal: #006184;
+  --ebv-teal-deep: #004d69;
+  --ebv-navy: #002e5d;
+  --ebv-sky: #e8f3f7;
+  --ebv-bg: #f5f7f8;
+  --ebv-surface: #ffffff;
+  --ebv-text: #1c1c1c;
+  --ebv-muted: #5c6b73;
+  --ebv-line: #d5dee3;
+  --ebv-radius: 12px;
+}
+
+.ebv-body {
+  /* Remapear tokens Bini Tools → tema claro do portal */
+  --b-bg: var(--ebv-bg);
+  --b-surface: var(--ebv-surface);
+  --b-elev: #eef3f5;
+  --b-line: var(--ebv-line);
+  --b-text: var(--ebv-text);
+  --b-mute: var(--ebv-muted);
+  --b-muted: var(--ebv-muted);
+  --b-accent: var(--ebv-teal);
+  --b-accent-2: var(--ebv-teal);
+  --b-radius: var(--ebv-radius);
+
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 500px at 10% -10%, #d9eef5 0%, transparent 55%),
+    radial-gradient(900px 420px at 100% 0%, #e7f1f6 0%, transparent 50%),
+    var(--ebv-bg);
+  color: var(--ebv-text);
+  font-family: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+}
+
+.ebv-body a {
+  color: var(--ebv-teal);
+}
+.ebv-body a:hover {
+  color: var(--ebv-teal-deep);
+}
+
+.ebv-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 1.25rem;
+  background: var(--ebv-surface);
+  border-bottom: 1px solid var(--ebv-line);
+  box-shadow: 0 1px 0 #fff8, 0 8px 24px #002e5d0a;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.ebv-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  text-decoration: none;
+  color: var(--ebv-navy);
+}
+.ebv-brand:hover {
+  color: var(--ebv-navy);
+  text-decoration: none;
+}
+
+.ebv-brand-mark {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #0a0a0a;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--ebv-teal);
+}
+
+.ebv-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.ebv-brand-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+}
+
+.ebv-brand-sub {
+  font-size: 0.78rem;
+  color: var(--ebv-teal);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.ebv-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem 0.85rem;
+  flex-wrap: wrap;
+  font-size: 0.92rem;
+}
+
+.ebv-nav a {
+  color: var(--ebv-muted);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.25rem 0.15rem;
+  border-bottom: 2px solid transparent;
+}
+.ebv-nav a:hover,
+.ebv-nav a.is-on {
+  color: var(--ebv-teal);
+  border-bottom-color: var(--ebv-teal);
+  text-decoration: none;
+}
+
+.ebv-nav-out { display: inline; margin: 0; }
+.ebv-who {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.05rem;
+  margin-left: 0.15rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--ebv-line);
+  background: var(--ebv-sky);
+  line-height: 1.15;
+  max-width: 14rem;
+}
+.ebv-who-lab {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ebv-muted);
+}
+.ebv-who-name {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--ebv-navy);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 13rem;
+}
+.ebv-who-user {
+  font-size: 0.75rem;
+  color: var(--ebv-teal);
+  font-weight: 600;
+}
+.ebv-linkish {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ebv-muted);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ebv-linkish:hover { color: var(--ebv-teal); }
+
+.ebv-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.25rem 1.1rem 2.5rem;
+}
+
+/* Tipografia e formulários (sobrescreve hardcodes escuros) */
+.ebv-body .bini-h1,
+.ebv-body .bini-h2 {
+  color: var(--ebv-navy);
+}
+.ebv-body .bini-sub,
+.ebv-body .bini-hint {
+  color: var(--ebv-muted);
+}
+.ebv-body .bini-label {
+  color: var(--ebv-navy);
+}
+.ebv-body .bini-input,
+.ebv-body .bini-ta,
+.ebv-body .bini-file,
+.ebv-body select.bini-input {
+  color: var(--ebv-text);
+  background: #fff;
+  border-color: var(--ebv-line);
+}
+.ebv-body .bini-input:focus,
+.ebv-body .bini-ta:focus,
+.ebv-body select.bini-input:focus {
+  outline: 2px solid color-mix(in srgb, var(--ebv-teal) 35%, transparent);
+  border-color: var(--ebv-teal);
+}
+.ebv-body .bini-btn {
+  background: #fff;
+  border-color: var(--ebv-line);
+  color: var(--ebv-navy);
+}
+.ebv-body .bini-btn:hover {
+  background: var(--ebv-sky);
+  border-color: var(--ebv-teal);
+  color: var(--ebv-navy);
+}
+.ebv-btn-prim,
+.ebv-body .bini-btn-prim {
+  background: var(--ebv-teal) !important;
+  border-color: var(--ebv-teal-deep) !important;
+  color: #fff !important;
+}
+.ebv-body .bini-btn-prim:hover {
+  background: var(--ebv-teal-deep) !important;
+  filter: none;
+}
+.ebv-body .bini-btn-ghost {
+  background: #fff;
+  border-color: var(--ebv-line);
+  color: var(--ebv-navy);
+}
+.ebv-body .bini-btn-ghost:hover {
+  background: var(--ebv-sky);
+}
+.ebv-body .bini-btn-warn {
+  background: #fff8e8;
+  border-color: #e0b44a;
+  color: #7a5608;
+}
+.ebv-body .bini-btn-danger-ghost,
+.ebv-body .bini-estaca-btn-reject {
+  background: #fff5f5;
+  border-color: #e8a0a0;
+  color: #9b1c1c;
+}
+.ebv-body .bini-msg-ok { color: #0f766e; }
+.ebv-body .bini-msg-err { color: #b91c1c; }
+
+.ebv-body .bini-profile-section {
+  border-color: var(--ebv-line);
+  background: var(--ebv-surface);
+}
+.ebv-body .bini-profile-legend {
+  color: var(--ebv-navy);
+}
+
+/* Login */
+.ebv-auth-body {
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  min-height: 100vh;
+  background:
+    linear-gradient(165deg, #e8f3f7 0%, #f7fafb 42%, #eef4f7 100%);
+}
+
+.ebv-auth {
+  width: 100%;
+  max-width: 400px;
+  background: var(--ebv-surface);
+  border: 1px solid var(--ebv-line);
+  border-radius: 16px;
+  padding: 1.75rem 1.35rem 1.9rem;
+  box-shadow: 0 18px 50px #002e5d14;
+  text-align: center;
+}
+
+.ebv-auth-mark {
+  display: block;
+  width: 5.5rem;
+  height: 5.5rem;
+  margin: 0 auto 0.85rem;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #0a0a0a;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--ebv-teal), 0 12px 28px #002e5d22;
+}
+
+.ebv-auth-title {
+  margin: 0 0 0.25rem;
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: var(--ebv-navy);
+}
+
+.ebv-auth-sub {
+  margin: 0 0 1.1rem;
+  color: var(--ebv-muted);
+  font-size: 0.95rem;
+}
+
+.ebv-auth .bini-form {
+  text-align: left;
+}
+
+.ebv-auth .ebv-btn-prim {
+  width: 100%;
+  margin-top: 0.35rem;
+}
+
+/* Em portal, ribbon secundária fica oculta — navegação está no topo */
+.ebv-body .bini-estaca-menu-ribbon {
+  display: none;
+}
+
+/* —— Hub cards / miolo Estaca (contraste no fundo claro) —— */
+.ebv-body .bini-estaca-subtool-card {
+  background: var(--ebv-surface);
+  border: 1px solid var(--ebv-line);
+  color: var(--ebv-text);
+  box-shadow: 0 4px 16px #002e5d0a;
+}
+.ebv-body .bini-estaca-subtool-card:hover {
+  border-color: var(--ebv-teal);
+  box-shadow: 0 10px 28px #00618418;
+  text-decoration: none;
+  color: var(--ebv-text);
+}
+.ebv-body .bini-estaca-subtool-title {
+  color: var(--ebv-navy);
+}
+.ebv-body .bini-estaca-subtool-desc {
+  color: var(--ebv-muted);
+}
+
+.ebv-body .bini-estaca-flow {
+  background: var(--ebv-surface);
+  border-color: var(--ebv-line);
+  box-shadow: 0 2px 10px #002e5d08;
+}
+.ebv-body .bini-estaca-flow-step {
+  color: var(--ebv-text);
+}
+.ebv-body .bini-estaca-flow-step:hover {
+  background: var(--ebv-sky);
+}
+.ebv-body .bini-estaca-flow-step.is-on {
+  background: linear-gradient(180deg, var(--ebv-teal), var(--ebv-teal-deep));
+  box-shadow: 0 1px 6px #00618440;
+}
+.ebv-body .bini-estaca-flow-lab {
+  color: var(--ebv-navy);
+}
+.ebv-body .bini-estaca-flow-count {
+  color: var(--ebv-teal);
+}
+.ebv-body .bini-estaca-flow-step.is-on .bini-estaca-flow-lab,
+.ebv-body .bini-estaca-flow-step.is-on .bini-estaca-flow-count {
+  color: #eff8fb;
+}
+.ebv-body .bini-estaca-flow-arrow {
+  color: #94a3b8;
+}
+.ebv-body .bini-estaca-step-help-sum {
+  border-color: var(--ebv-line);
+  color: var(--ebv-teal);
+  background: #fff;
+}
+.ebv-body .bini-estaca-step-help-sum:hover {
+  border-color: var(--ebv-teal);
+  color: var(--ebv-navy);
+  background: var(--ebv-sky);
+}
+.ebv-body .bini-estaca-step-help-body {
+  background: #fff;
+  border-color: var(--ebv-line);
+  color: var(--ebv-text);
+  box-shadow: 0 10px 28px #00618418;
+}
+.ebv-body .bini-estaca-register-box {
+  background: color-mix(in srgb, var(--ebv-sky) 75%, #fff);
+  border-color: color-mix(in srgb, var(--ebv-teal) 40%, var(--ebv-line));
+  color: var(--ebv-text);
+}
+
+.ebv-body .bini-estaca-filter {
+  background: #fff;
+  border-color: var(--ebv-line);
+  color: var(--ebv-navy);
+}
+.ebv-body .bini-estaca-filter.is-on {
+  background: var(--ebv-sky);
+  border-color: var(--ebv-teal);
+  color: var(--ebv-teal-deep);
+}
+
+.ebv-body .bini-estaca-new-plus {
+  background: #fff;
+  border-color: color-mix(in srgb, var(--ebv-line) 55%, var(--ebv-teal));
+  color: var(--ebv-navy);
+}
+.ebv-body .bini-estaca-new-plus:hover,
+.ebv-body .bini-estaca-new[open] > .bini-estaca-new-plus {
+  border-color: var(--ebv-teal);
+  background: var(--ebv-sky);
+}
+.ebv-body .bini-estaca-new-plus-mark {
+  color: var(--ebv-teal);
+}
+.ebv-body .bini-estaca-new-form,
+.ebv-body .bini-estaca-new[open] .bini-estaca-new-form {
+  background: var(--ebv-surface);
+  border: 1px solid var(--ebv-line);
+  border-radius: var(--ebv-radius);
+  padding: 1rem;
+}
+.ebv-body .bini-estaca-field > span {
+  color: var(--ebv-navy);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.ebv-body .bini-estaca-card {
+  background: var(--ebv-surface);
+  border-color: var(--ebv-line);
+  color: var(--ebv-text);
+  box-shadow: 0 2px 10px #002e5d08;
+}
+.ebv-body .bini-estaca-card:hover {
+  border-color: var(--ebv-teal);
+  background: #fafcfd;
+  text-decoration: none;
+  color: var(--ebv-text);
+}
+.ebv-body .bini-estaca-card-name {
+  color: var(--ebv-navy);
+}
+.ebv-body .bini-estaca-card-title,
+.ebv-body .bini-estaca-tl-state,
+.ebv-body .bini-estaca-user-meta,
+.ebv-body .bini-estaca-hist-meta,
+.ebv-body .bini-estaca-hist-detail {
+  color: var(--ebv-muted);
+}
+
+.ebv-body .bini-estaca-pill {
+  background: var(--ebv-sky);
+  color: var(--ebv-navy);
+}
+.ebv-body .bini-estaca-pill--step {
+  background: #dceef5;
+  color: var(--ebv-teal-deep);
+}
+.ebv-body .bini-estaca-pill--ok {
+  background: #d1fae5;
+  color: #065f46;
+}
+.ebv-body .bini-estaca-pill--rej {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.ebv-body .bini-estaca-dot {
+  background: #cbd5e1;
+}
+.ebv-body .bini-estaca-dot--upcoming {
+  background: #94a3b8;
+}
+.ebv-body .bini-estaca-dot--skipped {
+  background: #cbd5e1;
+}
+
+.ebv-body .bini-estaca-timeline {
+  background: var(--ebv-surface);
+  border-color: var(--ebv-line);
+}
+.ebv-body .bini-estaca-tl-item {
+  border-bottom-color: var(--ebv-line);
+}
+.ebv-body .bini-estaca-tl-item--current {
+  background: var(--ebv-sky);
+}
+.ebv-body .bini-estaca-tl-lab {
+  color: var(--ebv-navy);
+}
+.ebv-body .bini-estaca-tl-mark {
+  background: #cbd5e1;
+  border-color: #94a3b8;
+}
+
+.ebv-body .bini-estaca-notes,
+.ebv-body .bini-estaca-actions,
+.ebv-body .bini-estaca-assignee,
+.ebv-body .bini-estaca-admin-role,
+.ebv-body .bini-estaca-user-row,
+.ebv-body .bini-estaca-history,
+.ebv-body .bini-cred-box {
+  background: var(--ebv-surface);
+  border-color: var(--ebv-line);
+  color: var(--ebv-text);
+}
+.ebv-body .bini-estaca-actions {
+  border-color: color-mix(in srgb, var(--ebv-teal) 35%, var(--ebv-line));
+  background: color-mix(in srgb, var(--ebv-sky) 70%, #fff);
+}
+.ebv-body .bini-estaca-reject-sum {
+  color: #b91c1c;
+}
+.ebv-body .bini-estaca-reject-box {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #7f1d1d;
+}
+.ebv-body .bini-estaca-purge {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+.ebv-body .bini-estaca-purge-sum,
+.ebv-body .bini-estaca-purge-warn {
+  color: #7f1d1d;
+}
+.ebv-body .bini-estaca-done-box {
+  background: #ecfdf5;
+  border-color: #6ee7b7;
+  color: #065f46;
+}
+.ebv-body .bini-estaca-assign-sum {
+  color: var(--ebv-teal);
+}
+.ebv-body .bini-cred-box {
+  background: #ecfdf5;
+  border-color: #6ee7b7;
+}
+
+.ebv-body .bini-estaca-hist-item {
+  border-color: var(--ebv-line);
+  background: var(--ebv-surface);
+}
+.ebv-body .bini-estaca-hist-lab {
+  color: var(--ebv-navy);
+}
+
+@media (max-width: 640px) {
+  .ebv-top { padding: 0.65rem 0.85rem; }
+  .ebv-brand-sub { display: none; }
+  .ebv-nav { width: 100%; justify-content: flex-start; }
+}

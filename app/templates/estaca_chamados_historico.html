@@ -1,0 +1,37 @@
+{% extends estaca_layout %}
+{% block title %}Histórico de chamados — Estaca Boa Vista{% endblock %}
+{% block content %}
+<section class="bini-estaca-page">
+  {% include "partials/estaca_menu_ribbon.html" %}
+
+  <header class="bini-tool-hd">
+    <h1 class="bini-h1">Histórico de chamados</h1>
+    <p class="bini-sub">
+      Concluídos e rejeitados
+      {% if leader_role_label %} · {{ leader_role_label }}{% endif %}
+      {% if ward_label %} · {{ ward_label }}{% endif %}.
+    </p>
+  </header>
+
+  {% if callings %}
+  <ul class="bini-estaca-list">
+    {% for c in callings %}
+    <li>
+      <a class="bini-estaca-card {% if c.status == 'rejected' %}bini-estaca-card--rejected{% else %}bini-estaca-card--done{% endif %}" href="{{ url_for('estaca.chamado_detail', cid=c.id) }}">
+        <div class="bini-estaca-card-main">
+          <span class="bini-estaca-card-name">{{ c.person_name }}</span>
+          <span class="bini-estaca-card-title">{{ c.calling_title }}</span>
+        </div>
+        <div class="bini-estaca-card-meta">
+          <span class="bini-estaca-pill">{{ c.ward_label }}</span>
+          <span class="bini-estaca-pill {% if c.status == 'rejected' %}bini-estaca-pill--rej{% else %}bini-estaca-pill--ok{% endif %}">{{ c.status_label }}</span>
+        </div>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="bini-empty">Ainda não há chamados no histórico visível para ti.</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+venv/
+.env
+instance/
+.deploy-state/
+*.log
+.DS_Store

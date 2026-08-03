@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Entrar — Estaca Boa Vista</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/estaca/church_jesus_christ_simplified_symbol.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/estaca/church_jesus_christ_simplified_symbol.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/binitools.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estaca_portal.css') }}">
+</head>
+<body class="ebv-body ebv-auth-body">
+  <main class="ebv-auth">
+    <img
+      class="ebv-auth-mark"
+      src="{{ url_for('static', filename='img/estaca/church_jesus_christ_simplified_symbol.png') }}"
+      width="88"
+      height="88"
+      alt=""
+    >
+    <h1 class="ebv-auth-title">Estaca Boa Vista</h1>
+    <p class="ebv-auth-sub">Ferramentas para líderes</p>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="bini-flash-wrap">
+      {% for cat, m in messages %}
+      <p class="bini-msg {% if cat == 'error' %}bini-msg-err{% else %}bini-msg-ok{% endif %}">{{ m }}</p>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    <form class="bini-form" method="post" action="{{ url_for('ebv.login') }}" autocomplete="on">
+      <label class="bini-label" for="username">Utilizador</label>
+      <input class="bini-input" id="username" name="username" autocomplete="username" required autofocus>
+      <label class="bini-label" for="password">Senha</label>
+      <input class="bini-input" id="password" name="password" type="password" autocomplete="current-password" required>
+      <button class="bini-btn ebv-btn-prim" type="submit">Entrar</button>
+    </form>
+  </main>
+</body>
+</html>
