@@ -1,17 +1,8 @@
 <nav class="bini-estaca-menu-ribbon" aria-label="Estaca Boa Vista">
-  {% if estaca_portal %}
-    {% if estaca_ribbon == 'hub' %}
-    <span class="bini-estaca-ribbon-here" aria-current="page">Início</span>
-    {% else %}
-    <a class="bini-estaca-ribbon-link" href="{{ url_for('estaca.index') }}">Início</a>
-    {% endif %}
+  {% if estaca_ribbon == 'hub' %}
+  <span class="bini-estaca-ribbon-here" aria-current="page">Início</span>
   {% else %}
-    <a class="bini-estaca-ribbon-link" href="{{ url_for('tools.home') }}">← Início</a>
-    {% if estaca_ribbon == 'hub' %}
-    <span class="bini-estaca-ribbon-here" aria-current="page">Estaca</span>
-    {% else %}
-    <a class="bini-estaca-ribbon-link" href="{{ url_for('estaca.index') }}">Estaca</a>
-    {% endif %}
+  <a class="bini-estaca-ribbon-link" href="{{ url_for('estaca.index') }}">Início</a>
   {% endif %}
   {% if estaca_ribbon == 'chamados' %}
   <span class="bini-estaca-ribbon-here" aria-current="page">Chamados</span>
