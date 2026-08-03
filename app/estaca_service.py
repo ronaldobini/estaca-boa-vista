@@ -699,10 +699,10 @@ def _timeline(c: BiniEstacaCalling) -> list[dict]:
 
 
 def wards_for_create(ctx: LeaderContext) -> list[tuple[str, str]]:
-    from app.estaca_constants import WARDS
+    from app.estaca_constants import WARD_STAKE, WARD_LABELS, WARDS
 
     if ctx.is_stake or ctx.is_admin_override:
-        return list(WARDS)
+        return [(WARD_STAKE, WARD_LABELS[WARD_STAKE])] + list(WARDS)
     if ctx.ward_slug and ctx.ward_slug in WARD_SLUGS:
         return [(ctx.ward_slug, WARD_LABELS[ctx.ward_slug])]
     return []

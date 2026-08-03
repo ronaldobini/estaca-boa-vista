@@ -21,6 +21,7 @@ from app.estaca_constants import (
     STATUS_REGISTER_SYSTEM,
     STATUS_SACRAMENT,
     WARD_ROLES,
+    WARD_STAKE,
     role_rank,
 )
 from app.models import BiniEstacaCalling, BiniEstacaLeader, User
@@ -154,7 +155,14 @@ def can_assign_role(ctx: LeaderContext, target_role: str) -> bool:
     return role_rank(target_role) <= ctx.rank
 
 
+def is_stake_scope_calling(c: BiniEstacaCalling) -> bool:
+    """Chamado da estaca (sem ala) — visível só a líderes da estaca."""
+    return c.ward_slug == WARD_STAKE
+
+
 def can_view_calling(ctx: LeaderContext, c: BiniEstacaCalling) -> bool:
+    if is_stake_scope_calling(c):
+        return ctx.is_stake or ctx.is_estaca_admin
     if ctx.is_stake or ctx.is_estaca_admin:
         return True
     if ctx.ward_slug and c.ward_slug != ctx.ward_slug:
@@ -165,6 +173,8 @@ def can_view_calling(ctx: LeaderContext, c: BiniEstacaCalling) -> bool:
 
 
 def can_create_indication(ctx: LeaderContext, ward_slug: str) -> bool:
+    if ward_slug == WARD_STAKE:
+        return ctx.is_stake or ctx.is_estaca_admin
     if ctx.is_stake or ctx.is_estaca_admin:
         return True
     if ctx.role not in WARD_ROLES:
@@ -210,6 +220,10 @@ def can_mark_sacrament(ctx: LeaderContext, c: BiniEstacaCalling) -> bool:
 
 
 def can_mark_designation(ctx: LeaderContext, c: BiniEstacaCalling) -> bool:
+    if is_stake_scope_calling(c):
+        if ctx.can_act_stake_pipeline:
+            return True
+        return _is_step_assignee(ctx, c, STATUS_DESIGNATION)
     if ctx.can_act_stake_pipeline:
         return True
     if _is_step_assignee(ctx, c, STATUS_DESIGNATION):

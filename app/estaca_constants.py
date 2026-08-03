@@ -7,6 +7,8 @@ WARD_BOA_VISTA = "boa_vista"
 WARD_TIMBU = "timbu"
 WARD_BACACHERI = "bacacheri"
 WARD_JD_ALIANCA = "jd_alianca"
+# Chamados da própria estaca (sem ala) — só líderes da estaca
+WARD_STAKE = "estaca_bv"
 
 WARDS: list[tuple[str, str]] = [
     (WARD_STA_CANDIDA, "Sta. Cândida"),
@@ -15,8 +17,9 @@ WARDS: list[tuple[str, str]] = [
     (WARD_BACACHERI, "Bacacheri"),
     (WARD_JD_ALIANCA, "Jd. Aliança"),
 ]
-WARD_SLUGS = frozenset(s for s, _ in WARDS)
+WARD_SLUGS = frozenset(s for s, _ in WARDS) | {WARD_STAKE}
 WARD_LABELS = {s: lab for s, lab in WARDS}
+WARD_LABELS[WARD_STAKE] = "Estaca Boa Vista"
 
 # Flag is_admin (coluna) — Admin *só da Estaca Boa Vista*; pode coexistir com qualquer role.
 # Não eleva tools_all nem acesso a Mercado/Ala/Finanças/Admin Bini.
