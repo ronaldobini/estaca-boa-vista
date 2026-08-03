@@ -3,6 +3,9 @@ from __future__ import annotations
 
 import logging
 
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required
 
@@ -44,6 +47,7 @@ from app.estaca_service import (
     list_callings,
     list_all_leaders,
     mark_designated,
+    parse_designation_date,
     mark_interviewed,
     mark_registered_system,
     mark_sacrament,
@@ -214,6 +218,7 @@ def chamado_detail(cid: int):
         if view.get("can_assign_responsible")
         else [],
         designation_leaders=list_all_leaders() if need_designation_leaders else [],
+        designation_date_default=datetime.now(ZoneInfo("America/Sao_Paulo")).date().isoformat(),
         can_manage_users=can_manage_estaca_users(ctx),
     )
 
@@ -363,7 +368,12 @@ def chamado_acao(cid: int):
             if not uid_raw.isdigit():
                 raise EstacaError("Escolhe quem designou (designado por).")
             mark_designated(
-                ctx, cid, designated_by_user_id=int(uid_raw)
+                ctx,
+                cid,
+                designated_by_user_id=int(uid_raw),
+                designation_date=parse_designation_date(
+                    request.form.get("designation_date") or ""
+                ),
             )
             flash(
                 "Designação registada. Segue para registo no sistema "

@@ -119,6 +119,14 @@ def create_app() -> Flask:
                 dt = dt.replace(tzinfo=timezone.utc)
             return dt.astimezone(local_tz).strftime("%d/%m/%Y %H:%M")
 
+        def _fmt_date(dt: datetime | None) -> str:
+            if dt is None:
+                return "—"
+            local_tz = ZoneInfo("America/Sao_Paulo")
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            return dt.astimezone(local_tz).strftime("%d/%m/%Y")
+
         can_manage_users = False
         if has_request_context() and current_user.is_authenticated:
             ctx = resolve_leader_context(current_user)
@@ -126,6 +134,7 @@ def create_app() -> Flask:
 
         return {
             "fmt_dt": _fmt_dt,
+            "fmt_date": _fmt_date,
             "estaca_portal": True,
             "estaca_layout": estaca_layout_name() if has_request_context() else "estaca_portal_base.html",
             "can_manage_users": can_manage_users,

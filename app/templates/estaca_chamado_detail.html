@@ -67,7 +67,7 @@
       <strong>Chamado:</strong> {{ calling.calling_title }} · {{ calling.ward_label }}<br>
       <strong>Designado por:</strong>
       {{ calling.designated_by_info.label }}{% if calling.designated_by_info.role_label %} · {{ calling.designated_by_info.role_label }}{% endif %}
-      {% if calling.designated_at %}<br><strong>Quando:</strong> {{ fmt_dt(calling.designated_at) }}{% endif %}
+      {% if calling.designated_at %}<br><strong>Data da designação:</strong> {{ fmt_date(calling.designated_at) }}{% endif %}
     </p>
     <p class="bini-hint">Usa estes dados para registar a designação no sistema oficial. Depois confirma abaixo.</p>
   </div>
@@ -82,7 +82,7 @@
     <p><strong>Chamado concluído</strong> — registado no sistema{% if calling.completed_at %} em {{ fmt_dt(calling.completed_at) }}{% endif %}.</p>
     {% if calling.designated_by_info %}
     <p>
-      Designado por {{ calling.designated_by_info.label }}{% if calling.designated_at %} em {{ fmt_dt(calling.designated_at) }}{% endif %}.
+      Designado por {{ calling.designated_by_info.label }}{% if calling.designated_at %} · data da designação {{ fmt_date(calling.designated_at) }}{% endif %}.
     </p>
     {% endif %}
   </div>
@@ -128,6 +128,18 @@
             {% endfor %}
           </select>
         </label>
+        <label class="bini-estaca-field">
+          <span>Data da designação</span>
+          <input
+            class="bini-input"
+            type="date"
+            name="designation_date"
+            required
+            value="{{ designation_date_default }}"
+            max="{{ designation_date_default }}"
+          >
+        </label>
+        <p class="bini-hint">Data em que a designação foi realizada (para registo no sistema da Igreja).</p>
         <button type="submit" class="bini-btn bini-btn-prim">Designação realizada</button>
       </form>
       {% elif act == 'mark_registered' %}

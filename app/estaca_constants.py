@@ -130,13 +130,13 @@ WORKFLOW_STEP_HELP: dict[str, str] = {
     ),
     STATUS_DESIGNATION: (
         "O líder competente designa o membro no chamado. "
-        "Quem executa: bispado da ala (sua ala), responsável atribuído, ou líderes da estaca. "
-        "Indica-se quem designou para o registo."
+        "Indica quem designou e a data real do evento — essa data será usada no registo no sistema. "
+        "Quem executa: bispado da ala (sua ala), responsável atribuído, ou líderes da estaca."
     ),
     STATUS_REGISTER_SYSTEM: (
         "Registo oficial da designação no sistema da Igreja (LCR / ferramentas oficiais). "
-        "Quem executa: secretários da estaca; a presidência da estaca também pode concluir este passo. "
-        "Usa os dados de quem designou e quando."
+        "Usa a data da designação indicada no passo anterior. "
+        "Quem executa: secretários da estaca; a presidência da estaca também pode concluir este passo."
     ),
 }
 

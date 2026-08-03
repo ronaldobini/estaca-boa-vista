@@ -1,7 +1,8 @@
 """Serviço de chamados da Estaca Boa Vista."""
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime, timezone
+from zoneinfo import ZoneInfo
 
 from app.estaca_access import (
     LeaderContext,
@@ -66,6 +67,28 @@ class EstacaError(Exception):
 
 def _now() -> datetime:
     return utcnow()
+
+
+def parse_designation_date(raw: str) -> datetime:
+    """Data real da designação (evento), não o momento do registo na app."""
+    value = (raw or "").strip()
+    if not value:
+        raise EstacaError("Indica a data da designação.")
+    try:
+        event_day = date.fromisoformat(value)
+    except ValueError as e:
+        raise EstacaError("Data da designação inválida.") from e
+    tz = ZoneInfo("America/Sao_Paulo")
+    return datetime(event_day.year, event_day.month, event_day.day, 12, 0, 0, tzinfo=tz)
+
+
+def format_designation_date(dt: datetime | None) -> str:
+    if dt is None:
+        return "—"
+    local_tz = ZoneInfo("America/Sao_Paulo")
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(local_tz).strftime("%d/%m/%Y")
 
 
 def _user_display(user_id: int | None) -> str:
@@ -359,6 +382,7 @@ def mark_designated(
     calling_id: int,
     *,
     designated_by_user_id: int,
+    designation_date: datetime,
 ) -> BiniEstacaCalling:
     c = get_calling(ctx, calling_id)
     if c.status != STATUS_DESIGNATION:
@@ -373,7 +397,7 @@ def mark_designated(
     now = _now()
     c.status = STATUS_REGISTER_SYSTEM
     c.designated_by = designated_by_user_id
-    c.designated_at = now
+    c.designated_at = designation_date
     c.updated_at = now
     _log_event(
         c,
@@ -381,7 +405,7 @@ def mark_designated(
         actor_user_id=designated_by_user_id,
         actor_role=designee.role,
         actor_label=_user_display(designated_by_user_id),
-        detail="Designado por este líder",
+        detail=f"Data da designação: {format_designation_date(designation_date)}",
         at=now,
     )
     db.session.commit()
@@ -407,7 +431,7 @@ def mark_registered_system(
     who = _user_display(c.designated_by) if c.designated_by else "—"
     detail = f"Designado por {who}"
     if c.designated_at:
-        detail += f" em {c.designated_at.strftime('%d/%m/%Y %H:%M')}"
+        detail += f" · data da designação {format_designation_date(c.designated_at)}"
     _log_event(c, EVENT_MARK_REGISTERED, ctx, detail=detail, at=now)
     db.session.commit()
     return c
