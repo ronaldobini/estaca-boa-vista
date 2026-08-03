@@ -19,7 +19,7 @@ text = conf.read_text()
 block = '''
 # estacaboavista.com.br — Estaca Boa Vista (Gunicorn :5005)
 
-$HTTP["host"] == "estacaboavista.com.br" {
+$HTTP["host"] =~ "^(www\\.)?estacaboavista\\.com\\.br$" {
 
     $HTTP["url"] =~ "^/.well-known/acme-challenge/" {
 
@@ -62,7 +62,7 @@ from pathlib import Path
 conf = Path("/etc/lighttpd/lighttpd.conf")
 text = conf.read_text()
 block = '''
-    # estacaboavista.com.br — SSL
+    # estacaboavista.com.br — SSL (apex)
     $HTTP["host"] == "estacaboavista.com.br" {
 
         ssl.pemfile = "/etc/letsencrypt/live/estacaboavista.com.br/fullchain.pem"
@@ -70,6 +70,19 @@ block = '''
         ssl.privkey = "/etc/letsencrypt/live/estacaboavista.com.br/privkey.pem"
 
         setenv.add-request-header = ( "X-Forwarded-Proto" => "https" )
+
+    }
+
+    # www → canónico
+    $HTTP["host"] == "www.estacaboavista.com.br" {
+
+        ssl.pemfile = "/etc/letsencrypt/live/estacaboavista.com.br/fullchain.pem"
+
+        ssl.privkey = "/etc/letsencrypt/live/estacaboavista.com.br/privkey.pem"
+
+        url.redirect-code = 301
+
+        url.redirect = ( "^/(.*)" => "https://estacaboavista.com.br/$1" )
 
     }
 
