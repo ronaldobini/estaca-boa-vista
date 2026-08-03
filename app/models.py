@@ -73,7 +73,14 @@ class BiniEstacaLeader(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=utcnow)
     updated_at = db.Column(db.DateTime, nullable=False, default=utcnow, onupdate=utcnow)
 
-    user = db.relationship("User", backref=db.backref("estaca_leader", uselist=False))
+    user = db.relationship(
+        "User",
+        backref=db.backref(
+            "estaca_leader",
+            uselist=False,
+            cascade="all, delete-orphan",
+        ),
+    )
 
 
 class BiniEstacaCalling(db.Model):

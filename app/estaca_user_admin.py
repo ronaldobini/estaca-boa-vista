@@ -291,5 +291,15 @@ def delete_estaca_user(ctx: LeaderContext, user_id: int) -> None:
         raise EstacaUserError("Não é possível apagar a conta admin do sistema.")
     if u.id == ctx.user_id:
         raise EstacaUserError("Não podes apagar a tua própria conta.")
+    leader = BiniEstacaLeader.query.filter_by(user_id=u.id).first()
+    if leader:
+        db.session.delete(leader)
+    BiniUserTool.query.filter_by(user_id=u.id).delete()
     db.session.delete(u)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except IntegrityError as e:
+        db.session.rollback()
+        raise EstacaUserError(
+            "Não foi possível excluir o utilizador (existem dados associados)."
+        ) from e

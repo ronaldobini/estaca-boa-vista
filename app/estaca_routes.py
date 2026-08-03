@@ -276,6 +276,9 @@ def usuarios():
         except (EstacaUserError, ValueError) as e:
             msg = e.message if isinstance(e, EstacaUserError) else "Dados inválidos."
             flash(msg, "error")
+        except Exception:
+            _log.exception("estaca usuarios: acção %s falhou", action)
+            flash("Ocorreu um erro ao processar o pedido. Tenta novamente.", "error")
         return redirect(url_for("estaca.usuarios"))
 
     edit_id = request.args.get("edit")
