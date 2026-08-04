@@ -34,6 +34,7 @@ def create_app() -> Flask:
         "pool_pre_ping": True,
         "pool_recycle": 1800,
     }
+    app.config["JSON_AS_ASCII"] = False
     if os.environ.get("SESSION_COOKIE_SECURE", "").strip().lower() in (
         "1",
         "true",
